@@ -1,0 +1,53 @@
+{
+  "name": "Omer Esmer",
+  "job": "Full Stack Developer",
+  "username": "Skipperlla",
+  "github": "https://github.com/Skipperlla",
+  "avatar": "https://avatars.githubusercontent.com/u/68515357?v=4",
+  "about": "I'm Ömer Esmer a Full Stack Web Developer. I Spend most of time coding outstanding projects",
+  "contactEmail": "oesmer437@gmail.com",
+  "socials": [
+    {
+      "href": "https://discord.com/users/573054368568311808",
+      "icon": "discord",
+      "color": "#738ADB"
+    },
+    {
+      "href": "https://github.com/healthpackdev",
+      "icon": "github",
+      "color": "#fff"
+    },
+    {
+      "href": "https://twitter.com/yasinkadirkilic",
+      "icon": "twitter",
+      "color": "#1DA1F2"
+    },
+    {
+      "href": "https://open.spotify.com/user/yirq6nvra9f2pl9xhp4whw2c4",
+      "icon": "spotify",
+      "color": "#1DB954"
+    }
+  ],
+  "techs": [
+    { "name": "Javascript" },
+    { "name": "HTML" },
+    { "name": "CSS" },
+    { "name": "Typescript" },
+    { "name": "Webpack" },
+    { "name": "Bootstrap" },
+    { "name": "Figma" },
+    { "name": "Git" },
+    { "name": "Github", "dark": true },
+    { "name": "Heroku" },
+    { "name": "Node.js" },
+    { "name": "React" },
+    { "name": "Next.js", "dark": true },
+    { "name": "Sass" },
+    { "name": "MongoDB" },
+    { "name": "Linux" },
+    { "name": "Tailwindcss" },
+    { "name": "Yarn" },
+    { "name": "Pnpm" },
+    { "name": "Docker" }
+  ]
+}
