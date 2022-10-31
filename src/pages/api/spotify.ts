@@ -16,7 +16,7 @@ const SPOTIFY_REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN;
 const BASIC = Buffer.from(
   `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`
 ).toString("base64");
-const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
+const TOP_ITEMS_ENDPOINT = `https://api.spotify.com/v1/me/top`;
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token?`;
 
 const getAccessToken = async () => {
@@ -37,31 +37,31 @@ const getAccessToken = async () => {
   return response.json();
 };
 
-export const getNowPlaying = async () => {
+export const getTopArtists = async () => {
   const { access_token } = await getAccessToken();
 
-  return fetch(NOW_PLAYING_ENDPOINT, {
+  return fetch(`${TOP_ITEMS_ENDPOINT}/artists`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
   });
 };
+export const getTopTracks = async () => {
+  const { access_token } = await getAccessToken();
 
-interface IArtist {
-  name: string;
+  return fetch(`${TOP_ITEMS_ENDPOINT}/tracks`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+};
+interface ITopArtists {
   external_urls: { spotify: string };
+  genres: string[];
   id: string;
-}
-interface IAlbum {
+  images: { height: number; url: string; width: number }[];
   name: string;
-  href: {
-    external_urls: { spotify: string };
-  };
-  image: {
-    height: number;
-    href: string;
-    width: number;
-  };
+  popularity: number;
 }
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (_: any, res: NextApiResponse) => {
@@ -69,41 +69,25 @@ export default async (_: any, res: NextApiResponse) => {
     "Cache-Control",
     "public, s-maxage=60, stale-while-revalidate=30"
   );
-  const response = await getNowPlaying();
-  if (response.status === 204 || response.status > 400) {
-    return res.status(200).json({
-      isPlaying: false,
-    });
-  }
-
-  const track = await response.json();
-  if (track.currently_playing_type !== "track") {
-    return res.status(200).json({ isPlaying: false });
-  }
-
-  const album: IAlbum = {
-    name: track.item.album.name,
-    href: track.item.album.external_urls.spotify,
-    image: {
-      height: track.item.album.images[0].height,
-      href: track.item.album.images[0].url,
-      width: track.item.album.images[0].width,
-    },
-  };
-  const artists = track.item.artists.map((artist: IArtist) => ({
-    name: artist.name,
-    href: artist.external_urls.spotify,
-    id: artist.id,
-  }));
-  const href = track.item.external_urls.spotify;
-  const isPlaying = track.is_playing;
-  const title = track.item.name;
+  const responseTopArtists = await getTopArtists();
+  const responseTopArtistsJson = await responseTopArtists.json();
+  const artists = responseTopArtistsJson.items.map((item: ITopArtists) => {
+    return {
+      url: item.external_urls.spotify,
+      genres: item.genres,
+      id: item.id,
+      images: {
+        height: item.images[0].height,
+        url: item.images[0].url,
+        width: item.images[0].width,
+      },
+      name: item.name,
+      popularity: item.popularity,
+    };
+  });
+  const responseTopTracks = await getTopTracks();
 
   return res.status(200).json({
-    album,
     artists,
-    href,
-    isPlaying,
-    title,
   });
 };
