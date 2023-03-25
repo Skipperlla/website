@@ -1,4 +1,4 @@
-import { Footer, Nav } from "@layout/index";
+import { Footer, Nav } from "./components";
 import React, { FC, PropsWithChildren } from "react";
 
 const MainLayout: FC<PropsWithChildren> = ({ children }) => {
